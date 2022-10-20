@@ -1,0 +1,25 @@
+---
+# This Playbook runs all the common plays in the deployment
+
+- name: copy file
+  template:
+    src: notes.txt
+    dest: /opt/demo/
+
+- name: Install packages
+  apt:
+    name: htop
+
+- name: creare ansible user
+  ansible.builtin.user:
+    name: ansible
+    home: /home/ansible
+    shell: /bin/bash
+
+- name: copy sudoers_ansible
+  copy:
+    src: files/sudoers_ansible
+    dest: /etc/sudoers.d/ansible
+    owner: root
+    group: root
+    mode: 0400

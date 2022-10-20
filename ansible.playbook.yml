@@ -1,0 +1,14 @@
+---
+# this is file yaml
+- name: This is file yaml
+  hosts: server1
+  become: true
+
+  pre_tasks:
+    - name: update repositories
+      apt:
+        update_cache: yes
+      changed_when: False 
+
+  roles:
+    - role: common
