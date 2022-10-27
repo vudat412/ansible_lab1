@@ -1,0 +1,24 @@
+mysql_root_password: passwod@123
+mysql_databases:
+  - name: demo
+    encoding: latin1
+    collation: latin1_general_ci
+mysql_users:
+  - name: datv
+    host: "%"
+    password: passwod@123
+    priv: "demo.*:ALL"
+
+__mysql_daemon: mysql
+__mysql_packages:
+  - mysql-common
+  - mysql-server
+mysql_log_file_group: adm
+__mysql_slow_query_log_file: /var/log/mysql/mysql-slow.log
+__mysql_log_error: /var/log/mysql/mysql.err
+__mysql_syslog_tag: mysql
+__mysql_pid_file: /var/run/mysqld/mysqld.pid
+__mysql_config_file: /etc/mysql/my.cnf
+__mysql_config_include_dir: /etc/mysql/conf.d
+__mysql_socket: /var/run/mysqld/mysqld.sock
+__mysql_supports_innodb_large_prefix: true

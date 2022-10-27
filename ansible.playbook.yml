@@ -1,13 +1,11 @@
 ---
 # this is file yaml
-- name: This is file yaml
+- name: file yaml
   hosts: server1
   become: true
   
-  vars:
-    mysql_root_password: password
-    group_vars: all
-
+  vars_files:
+    - vars/main.yml
 
   pre_tasks:
     - name: update repositories
@@ -19,8 +17,5 @@
     - role: common
     - role: mysql
 
-  handlers:
-    - name: Restart mysql
-      service:
-        name: mysql
-        state: restarted
+  handlers: 
+    - import_tasks: handlers/main.yml

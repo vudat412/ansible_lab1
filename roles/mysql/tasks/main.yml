@@ -1,42 +1,18 @@
 ---
-# setup mysql
+# Variable configuration.
+- include_tasks: variables.yml
 
-- name: Installing Mysql and dependencies
-  package:
-    name: "{{item}}"
-    state: present
-    update_cache: yes
-  loop:
-    - mysql-server
-    - mysql-client 
-    - python3-mysqldb
-    - libmysqlclient-dev
-  become: yes
+# Setup/install tasks.
+- include_tasks: setup-mysql.yml
+  when: ansible_os_family == 'Debian'
 
-- name: start and enable mysql service
-  service:
-    name: mysql
-    state: started
-    enabled: yes
+- name: Check if MySQL packages were installed.
+  set_fact:
+    mysql_install_packages: "{{ deb_mysql_install_packages is defined and deb_mysql_install_packages.changed }}"
 
-- name: creating mysql user (medium_post)
-  mysql_user:
-    name: "{{db_user}}"
-    password: "{{db_pass}}"
-    priv: '*.*:ALL'
-    host: '%'
-    state: present
-
-- name: creating medium_db
-  mysql_db:
-    name: "{{db_name}}"
-    state: present
-
-- name: Enable remote login to mysql
-  lineinfile:
-     path: /etc/mysql/mysql.conf.d/mysqld.cnf
-     regexp: '^bind-address'
-     line: 'bind-address = 0.0.0.0'
-     backup: yes
-  notify:
-    - Restart mysql
+# Configure MySQL.
+- include_tasks: configure.yml
+- include_tasks: secure-installation.yml
+- include_tasks: databases.yml
+- include_tasks: users.yml
+- include_tasks: replication.yml
